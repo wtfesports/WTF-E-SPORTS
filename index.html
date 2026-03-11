@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>WTF ESPORTS</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="2.1style.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:#000;
+color:white;
+}
+
+/* HEADER */
+
+.main-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 40px;
+background:linear-gradient(90deg,#000,#111,#000);
+border-bottom:2px solid #00f7ff;
+position:sticky;
+top:0;
+z-index:1000;
+flex-wrap:wrap;
+}
+
+.logo{
+font-size:26px;
+font-weight:bold;
+color:#00f7ff;
+animation:logoGlow 2s infinite alternate;
+}
+
+@keyframes logoGlow{
+0%{text-shadow:0 0 5px #00f7ff;}
+100%{text-shadow:0 0 20px #00f7ff,0 0 40px #00f7ff;}
+}
+
+/* MENU */
+
+.menu{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.menu a{
+color:white;
+text-decoration:none;
+margin:8px 12px;
+font-size:15px;
+position:relative;
+transition:0.3s;
+}
+
+.menu a::after{
+content:'';
+position:absolute;
+left:0;
+bottom:-5px;
+width:0%;
+height:2px;
+background:#00f7ff;
+transition:0.3s;
+}
+
+.menu a:hover::after{
+width:100%;
+}
+
+.menu a:hover{
+color:#00f7ff;
+}
+
+/* HERO */
+
+.hero{
+height:60vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background-image:url("https://images.unsplash.com/photo-1542751371-adc38448a05e");
+background-size:cover;
+background-position:center;
+padding:20px;
+}
+
+.hero h1{
+font-size:48px;
+color:#00f7ff;
+animation:heroGlow 4s infinite alternate;
+}
+
+@keyframes heroGlow{
+0%{text-shadow:0 0 10px #00f7ff;}
+100%{text-shadow:0 0 30px #00f7ff,0 0 60px #00f7ff;}
+}
+
+/* SLOTS */
+
+.slots{
+padding:40px 20px;
+text-align:center;
+background:#0f2027;
+}
+
+.slot-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+gap:15px;
+max-width:900px;
+margin:auto;
+}
+
+.slot{
+padding:20px;
+background:#111;
+border:1px solid #00f7ff;
+border-radius:8px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.slot:hover{
+background:#00f7ff;
+color:black;
+}
+
+.booked{
+background:red;
+cursor:not-allowed;
+}
+
+/* PLAYERS */
+
+.players{
+padding:40px;
+background:#000;
+text-align:center;
+}
+
+.playerItem{
+background:#111;
+padding:10px;
+margin:10px auto;
+max-width:400px;
+border-radius:6px;
+border:1px solid #00f7ff;
+}
+
+/* FOOTER */
+
+footer{
+background:#000;
+text-align:center;
+padding:20px;
+}
+
+button{
+padding:10px 20px;
+background:#00f7ff;
+border:none;
+border-radius:5px;
+cursor:pointer;
+margin:10px;
+}
+
+/* MOBILE */
+
+@media (max-width:768px){
+
+.main-header{
+flex-direction:column;
+text-align:center;
+}
+
+.menu{
+flex-direction:column;
+}
+
+.menu a{
+margin:6px 0;
+}
+
+.hero h1{
+font-size:32px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="main-header">
+
+<div class="logo">🎮 WTF ESPORTS</div>
+
+<nav class="menu">
+
+<a href="index.html">Home</a>
+<a href="booking2.1.html">Tournament</a>
+<a href="leaderboard.html">Leaderboard</a>
+<a href="bracket.html">Bracket</a>
+<a href="rules.html">Rules</a>
+<a href="about.html">About Us</a>
+<a href="contact.html">Contact</a>
+<a href="player-login.html">Player Login</a>
+<a href="admin.html">Admin</a>
+
+</nav>
+
+</header>
+
+<section class="hero">
+
+<h3>Players Online</h3>
+<div id="onlinePlayers"></div>
+
+<h1>🔥 FREE FIRE CHAMPIONSHIP</h1>
+
+<p>Hosted by WTF ESPORTS</p>
+
+</section>
+
+<section class="slots">
+
+<h2>🔥 Tournament Slots (10)</h2>
+
+<h3 id="playerCounter" style="color:#00f7ff;margin-top:10px;">
+Players Joined: 0 / 10
+</h3>
+
+<h3 id="registrationStatus" style="color:red;"></h3>
+
+<div class="counter">
+Slots Left: <span id="slotsLeft"></span>
+</div>
+
+<div class="slot-grid" id="slots"></div>
+
+<button id="adminResetBtn" onclick="resetSlots()" style="display:none;">
+Admin Reset Slots
+</button>
+
+</section>
+
+<section class="players">
+
+<h2>🏆 Joined Players</h2>
+
+<div id="joinedPlayers"></div>
+
+</section>
+
+<footer>
+WTF ESPORTS © 2026
+</footer>
+
+<script>
+
+let count = localStorage.getItem("onlinePlayers") || 0;
+count++;
+localStorage.setItem("onlinePlayers",count);
+document.getElementById("onlinePlayers").innerText = count;
+
+let slots = JSON.parse(localStorage.getItem("slots")) || Array(10).fill(null);
+
+let slotContainer = document.getElementById("slots");
+
+function renderSlots(){
+
+slotContainer.innerHTML="";
+
+let left=0;
+
+slots.forEach((player,index)=>{
+
+let div=document.createElement("div");
+
+div.className="slot";
+
+if(player){
+
+div.classList.add("booked");
+
+div.innerText="Slot "+(index+1)+"\n"+player.name+"\nUID:"+player.uid;
+
+}else{
+
+left++;
+
+div.innerText="Slot "+(index+1);
+
+div.onclick=function(){
+
+let regStatus = localStorage.getItem("registrationStatus");
+
+if(regStatus === "closed"){
+alert("Registration Closed by Admin");
+return;
+}
+
+let count = slots.filter(s => s !== null).length;
+
+if(count === 10){
+alert("Tournament Full ❌");
+return;
+}
+
+let name = prompt("Enter Player Name");
+let uid = prompt("Enter Player UID");
+
+if(name && uid){
+
+slots[index]={name:name,uid:uid};
+
+localStorage.setItem("slots",JSON.stringify(slots));
+
+renderSlots();
+
+window.location.href="booking2.1.html";
+
+}
+
+};
+
+}
+
+slotContainer.appendChild(div);
+
+});
+
+document.getElementById("slotsLeft").innerText=left;
+
+updatePlayerCounter();
+
+}
+
+function updatePlayerCounter(){
+
+let count = slots.filter(s => s !== null).length;
+
+document.getElementById("playerCounter").innerText =
+"Players Joined: " + count + " / 10";
+
+if(count === 10){
+
+document.getElementById("registrationStatus").innerText =
+"Registration Closed ❌ Tournament Full";
+
+}
+
+}
+
+renderSlots();
+
+function resetSlots(){
+
+let pass = prompt("Admin Password");
+
+let adminPass = localStorage.getItem("adminPass");
+
+if(pass === adminPass){
+
+localStorage.removeItem("slots");
+
+location.reload();
+
+}else{
+
+alert("Access Denied");
+
+}
+
+}
+
+if(localStorage.getItem("adminLoggedIn") === "true"){
+document.getElementById("adminResetBtn").style.display="block";
+}
+
+</script>
+
+</body>
+</html>
