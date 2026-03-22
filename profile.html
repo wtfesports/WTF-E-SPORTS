@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Player Profile | WTF ESPORTS</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+body{
+background:black;
+color:white;
+font-family:Arial;
+text-align:center;
+}
+
+.profile{
+border:2px solid #00f7ff;
+padding:20px;
+margin:40px auto;
+width:300px;
+border-radius:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🎮 Player Profile</h1>
+
+<div class="profile">
+
+<h2 id="playerName"></h2>
+
+<p id="matches"></p>
+<p id="kills"></p>
+<p id="rank"></p>
+
+</div>
+
+<script>
+
+let player = JSON.parse(localStorage.getItem("currentPlayer"));
+
+if(player){
+
+document.getElementById("playerName").innerText = player.name;
+
+document.getElementById("matches").innerText =
+"Matches Played: " + (player.matches || 1);
+
+document.getElementById("kills").innerText =
+"Total Kills: " + (player.kills || Math.floor(Math.random()*20));
+
+let ranks = ["Rookie","Pro Player","Elite Player","Legend"];
+
+document.getElementById("rank").innerText =
+"Rank: " + ranks[Math.floor(Math.random()*ranks.length)];
+
+}
+
+</script>
+
+</body>
+</html>

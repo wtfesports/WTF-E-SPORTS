@@ -3,11 +3,13 @@
 <head>
 
 <title>WTF ESPORTS</title>
+<link rel="manifest" href="manifest.json">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="2.1style.css">
 
 <style>
+
+/* GLOBAL */
 
 *{
 margin:0;
@@ -17,8 +19,17 @@ font-family:Arial;
 }
 
 body{
-background:#000;
+background: linear-gradient(-45deg,#000,#0f2027,#2c5364,#000);
+background-size:400% 400%;
+animation:bgMove 12s ease infinite;
 color:white;
+overflow-x:hidden;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 
 /* HEADER */
@@ -27,25 +38,19 @@ color:white;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:18px 40px;
-background:linear-gradient(90deg,#000,#111,#000);
+padding:20px 40px;
+background:#000;
 border-bottom:2px solid #00f7ff;
 position:sticky;
 top:0;
 z-index:1000;
-flex-wrap:wrap;
 }
 
 .logo{
-font-size:26px;
+font-size:28px;
 font-weight:bold;
 color:#00f7ff;
-animation:logoGlow 2s infinite alternate;
-}
-
-@keyframes logoGlow{
-0%{text-shadow:0 0 5px #00f7ff;}
-100%{text-shadow:0 0 20px #00f7ff,0 0 40px #00f7ff;}
+text-shadow:0 0 10px #00f7ff;
 }
 
 /* MENU */
@@ -53,74 +58,72 @@ animation:logoGlow 2s infinite alternate;
 .menu{
 display:flex;
 flex-wrap:wrap;
-justify-content:center;
 }
 
 .menu a{
 color:white;
 text-decoration:none;
-margin:8px 12px;
+margin-left:20px;
 font-size:15px;
-position:relative;
 transition:0.3s;
-}
-
-.menu a::after{
-content:'';
-position:absolute;
-left:0;
-bottom:-5px;
-width:0%;
-height:2px;
-background:#00f7ff;
-transition:0.3s;
-}
-
-.menu a:hover::after{
-width:100%;
 }
 
 .menu a:hover{
 color:#00f7ff;
 }
 
+/* MOBILE MENU */
+
+.menu-toggle{
+display:none;
+font-size:28px;
+cursor:pointer;
+color:#00f7ff;
+}
+
 /* HERO */
 
 .hero{
-height:60vh;
+height:70vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
-background-image:url("https://images.unsplash.com/photo-1542751371-adc38448a05e");
-background-size:cover;
-background-position:center;
-padding:20px;
+background:url("https://images.unsplash.com/photo-1542751371-adc38448a05e") center/cover no-repeat;
 }
 
 .hero h1{
-font-size:48px;
+font-size:55px;
 color:#00f7ff;
-animation:heroGlow 4s infinite alternate;
+text-shadow:0 0 20px #00f7ff;
+animation:heroGlow 3s infinite alternate;
 }
 
 @keyframes heroGlow{
 0%{text-shadow:0 0 10px #00f7ff;}
-100%{text-shadow:0 0 30px #00f7ff,0 0 60px #00f7ff;}
+100%{text-shadow:0 0 40px #00f7ff;}
+}
+
+/* COUNTDOWN */
+
+#countdown{
+margin-top:10px;
+font-size:20px;
+color:yellow;
 }
 
 /* SLOTS */
 
 .slots{
-padding:40px 20px;
-text-align:center;
+padding:60px 20px;
 background:#0f2027;
+text-align:center;
 }
 
 .slot-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
 gap:15px;
 max-width:900px;
 margin:auto;
@@ -148,7 +151,7 @@ cursor:not-allowed;
 /* PLAYERS */
 
 .players{
-padding:40px;
+padding:60px 20px;
 background:#000;
 text-align:center;
 }
@@ -162,26 +165,29 @@ border-radius:6px;
 border:1px solid #00f7ff;
 }
 
+/* BUTTON */
+
+button{
+padding:10px 20px;
+background:#00f7ff;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin:10px;
+}
+
 /* FOOTER */
 
 footer{
 background:#000;
 text-align:center;
 padding:20px;
-}
-
-button{
-padding:10px 20px;
-background:#00f7ff;
-border:none;
-border-radius:5px;
-cursor:pointer;
-margin:10px;
+border-top:1px solid #00f7ff;
 }
 
 /* MOBILE */
 
-@media (max-width:768px){
+@media(max-width:768px){
 
 .main-header{
 flex-direction:column;
@@ -189,11 +195,16 @@ text-align:center;
 }
 
 .menu{
+display:none;
 flex-direction:column;
 }
 
-.menu a{
-margin:6px 0;
+.menu.active{
+display:flex;
+}
+
+.menu-toggle{
+display:block;
 }
 
 .hero h1{
@@ -212,10 +223,12 @@ font-size:32px;
 
 <div class="logo">🎮 WTF ESPORTS</div>
 
+<div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
 <nav class="menu">
 
 <a href="index.html">Home</a>
-<a href="booking2.1.html">Tournament</a>
+<a href="booking.html">Tournament</a>
 <a href="leaderboard.html">Leaderboard</a>
 <a href="bracket.html">Bracket</a>
 <a href="rules.html">Rules</a>
@@ -235,6 +248,8 @@ font-size:32px;
 
 <h1>🔥 FREE FIRE CHAMPIONSHIP</h1>
 
+<h2 id="countdown"></h2>
+
 <p>Hosted by WTF ESPORTS</p>
 
 </section>
@@ -243,15 +258,7 @@ font-size:32px;
 
 <h2>🔥 Tournament Slots (10)</h2>
 
-<h3 id="playerCounter" style="color:#00f7ff;margin-top:10px;">
-Players Joined: 0 / 10
-</h3>
-
-<h3 id="registrationStatus" style="color:red;"></h3>
-
-<div class="counter">
-Slots Left: <span id="slotsLeft"></span>
-</div>
+<h3 id="playerCounter">Players Joined: 0 / 10</h3>
 
 <div class="slot-grid" id="slots"></div>
 
@@ -266,6 +273,12 @@ Admin Reset Slots
 <h2>🏆 Joined Players</h2>
 
 <div id="joinedPlayers"></div>
+<section class="commentary">
+
+<h2>🎤 Match Commentary</h2>
+
+<div id="aiCommentary"></div>
+
 
 </section>
 
@@ -275,20 +288,48 @@ WTF ESPORTS © 2026
 
 <script>
 
+/* MOBILE MENU */
+
+function toggleMenu(){
+document.querySelector(".menu").classList.toggle("active");
+}
+
+/* ONLINE PLAYERS */
+
 let count = localStorage.getItem("onlinePlayers") || 0;
 count++;
 localStorage.setItem("onlinePlayers",count);
-document.getElementById("onlinePlayers").innerText = count;
+document.getElementById("onlinePlayers").innerText=count;
+
+/* COUNTDOWN */
+
+let eventDate = new Date("2026-03-20 18:00:00").getTime();
+
+setInterval(function(){
+
+let now = new Date().getTime();
+let distance = eventDate - now;
+
+let days = Math.floor(distance/(1000*60*60*24));
+let hours = Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+let minutes = Math.floor((distance%(1000*60*60))/(1000*60));
+let seconds = Math.floor((distance%(1000*60))/1000);
+
+document.getElementById("countdown").innerHTML =
+"⏳ Tournament Starts In: "+
+days+"d "+hours+"h "+minutes+"m "+seconds+"s";
+
+},1000);
+
+/* SLOT SYSTEM */
 
 let slots = JSON.parse(localStorage.getItem("slots")) || Array(10).fill(null);
 
-let slotContainer = document.getElementById("slots");
+let slotContainer=document.getElementById("slots");
 
 function renderSlots(){
 
 slotContainer.innerHTML="";
-
-let left=0;
 
 slots.forEach((player,index)=>{
 
@@ -300,42 +341,23 @@ if(player){
 
 div.classList.add("booked");
 
-div.innerText="Slot "+(index+1)+"\n"+player.name+"\nUID:"+player.uid;
+div.innerText="Slot "+(index+1)+"\n"+player.name;
 
 }else{
-
-left++;
 
 div.innerText="Slot "+(index+1);
 
 div.onclick=function(){
 
-let regStatus = localStorage.getItem("registrationStatus");
+let name=prompt("Enter Player Name");
 
-if(regStatus === "closed"){
-alert("Registration Closed by Admin");
-return;
-}
+if(name){
 
-let count = slots.filter(s => s !== null).length;
-
-if(count === 10){
-alert("Tournament Full ❌");
-return;
-}
-
-let name = prompt("Enter Player Name");
-let uid = prompt("Enter Player UID");
-
-if(name && uid){
-
-slots[index]={name:name,uid:uid};
+slots[index]={name:name};
 
 localStorage.setItem("slots",JSON.stringify(slots));
 
 renderSlots();
-
-window.location.href="booking2.1.html";
 
 }
 
@@ -347,29 +369,11 @@ slotContainer.appendChild(div);
 
 });
 
-document.getElementById("slotsLeft").innerText=left;
-
-updatePlayerCounter();
-
-}
-
-function updatePlayerCounter(){
-
-let count = slots.filter(s => s !== null).length;
-
-document.getElementById("playerCounter").innerText =
-"Players Joined: " + count + " / 10";
-
-if(count === 10){
-
-document.getElementById("registrationStatus").innerText =
-"Registration Closed ❌ Tournament Full";
-
-}
-
 }
 
 renderSlots();
+
+/* ADMIN RESET */
 
 function resetSlots(){
 
@@ -391,9 +395,36 @@ alert("Access Denied");
 
 }
 
-if(localStorage.getItem("adminLoggedIn") === "true"){
+if(localStorage.getItem("adminLoggedIn")==="true"){
 document.getElementById("adminResetBtn").style.display="block";
 }
+function generateCommentary(){
+
+let players = JSON.parse(localStorage.getItem("slots")) || [];
+
+let messages=[
+"🔥 What a match!",
+"⚡ Incredible gameplay!",
+"🎯 Perfect strategy!",
+"💥 Total domination!"
+];
+
+let randomMessage =
+messages[Math.floor(Math.random()*messages.length)];
+
+let randomPlayer = players.find(p => p !== null);
+
+if(randomPlayer){
+
+document.getElementById("aiCommentary").innerText =
+randomMessage + " " + randomPlayer.name +
+" is leading the battle!";
+
+}
+
+}
+
+generateCommentary();
 
 </script>
 

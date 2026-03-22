@@ -224,7 +224,7 @@ alert("Tournament Chat Cleared");
 <nav class="menu">
 
 <a href="index.html">Home</a>
-<a href="booking2.1.html">Tournament</a>
+<a href="booking.html">Tournament</a>
 <a href="leaderboard.html">Leaderboard</a>
 <a href="bracket.html">Bracket</a>
 <a href="rules.html">Rules</a>
@@ -460,6 +460,39 @@ function openRegistration(){
 localStorage.setItem("registrationStatus","open");
 alert("Registration Opened");
 }
+async function syncFirebasePlayers(){
+
+const res = await fetch("https://firestore.googleapis.com/v1/projects/wtf-esports-victory-start-here/databases/(default)/documents/players");
+
+const data = await res.json();
+
+if(!data.documents) return;
+
+let firebasePlayers = data.documents.map(doc=>{
+
+let fields = doc.fields;
+
+return {
+team: fields.team?.stringValue || "",
+leader: fields.leader?.stringValue || "",
+mobile: fields.mobile?.stringValue || "",
+game: fields.game?.stringValue || "",
+username: fields.username?.stringValue || "",
+password: fields.password?.stringValue || "",
+status: fields.status?.stringValue || "Pending"
+};
+
+});
+
+localStorage.setItem("players",JSON.stringify(firebasePlayers));
+
+players = firebasePlayers;
+
+renderPlayers();
+
+}
+
+syncFirebasePlayers();
 
 function closeRegistration(){
 localStorage.setItem("registrationStatus","closed");
@@ -475,7 +508,9 @@ players=players.filter(p=>p.mobile!==mobile);
 localStorage.setItem("players",JSON.stringify(players));
 
 renderPlayers();
+// FIREBASE DATA LOAD (ADD BELOW renderPlayers())
 
+a
 alert("User Removed");
 
 }
@@ -487,6 +522,7 @@ let kills=document.getElementById("winnerKills").value;
 let points=document.getElementById("winnerPoints").value;
 
 localStorage.setItem("tournamentWinner",JSON.stringify({team,kills,points}));
+localStorage.setItem("winnerName","Team Dragons");
 
 alert("Winner Announced");
 
@@ -543,6 +579,7 @@ localStorage.setItem("adminPass", pass);
 alert("Admin Password Saved");
 
 }
+<button onclick="declareWinner()">Declare Winner</button>
 </script>
 
 </body>
